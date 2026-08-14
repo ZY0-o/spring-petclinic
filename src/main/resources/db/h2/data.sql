@@ -51,3 +51,8 @@ INSERT INTO visits VALUES (default, 7, '2013-01-01', 'rabies shot');
 INSERT INTO visits VALUES (default, 8, '2013-01-02', 'rabies shot');
 INSERT INTO visits VALUES (default, 8, '2013-01-03', 'neutered');
 INSERT INTO visits VALUES (default, 7, '2013-01-04', 'spayed');
+
+INSERT INTO vaccinations VALUES (default, 1, 'Cats Vaccine', '2011-01-01', '2012-01-01', 'Annual cats vaccination');
+INSERT INTO vaccinations VALUES (default, 3, 'Dogs Vaccine', '2011-06-01', NULL, NULL);
+INSERT INTO vaccinations VALUES (default, 4, 'Dogs Vaccine', '2010-05-01', '2011-05-01', 'Annual dogs vaccination');
+INSERT INTO vaccinations VALUES (default, 9, 'Birds Vaccine', '2011-10-01', '2012-10-01', NULL);
