@@ -17,6 +17,7 @@ import org.springframework.test.context.aot.DisabledInAotMode;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @WebMvcTest(VaccinationController.class)
@@ -69,6 +70,30 @@ class VaccinationControllerTests {
 				.param("nextDate", "2014-01-01")
 				.param("notes", "Vaccination Notes"))
 			.andExpect(model().attributeHasErrors("vaccination"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("pets/createOrUpdateVaccinationForm"));
+	}
+
+	@Test
+	void processNewVaccinationFormHasErrorsWhenDateIsInFuture() throws Exception {
+		mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/vaccinations/new", TEST_OWNER_ID, TEST_PET_ID)
+				.param("name", "Cats Vaccine")
+				.param("date", LocalDate.now().plusDays(1).toString()))
+			.andExpect(model().attributeHasFieldErrors("vaccination", "date"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("pets/createOrUpdateVaccinationForm"));
+	}
+
+	@Test
+	void processNewVaccinationFormHasErrorsWhenNextDateIsBeforeDate() throws Exception {
+		mockMvc
+			.perform(post("/owners/{ownerId}/pets/{petId}/vaccinations/new", TEST_OWNER_ID, TEST_PET_ID)
+				.param("name", "Cats Vaccine")
+				.param("date", "2014-01-02")
+				.param("nextDate", "2014-01-01")
+				.param("notes", "Vaccination Notes"))
+			.andExpect(model().attributeHasFieldErrors("vaccination", "nextDate"))
 			.andExpect(status().isOk())
 			.andExpect(view().name("pets/createOrUpdateVaccinationForm"));
 	}

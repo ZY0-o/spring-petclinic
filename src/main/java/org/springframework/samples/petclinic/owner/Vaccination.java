@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "vaccinations")
@@ -20,6 +21,7 @@ public class Vaccination extends BaseEntity {
 	private String name;
 
 	@NotNull
+	@PastOrPresent
 	@Column(name = "vaccination_date")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;

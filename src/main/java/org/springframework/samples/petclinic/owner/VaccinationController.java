@@ -25,8 +25,14 @@ class VaccinationController {
 		this.owners = owners;
 	}
 
-	@InitBinder
+	@InitBinder("owner")
 	public void setAllowedFields(WebDataBinder dataBinder) {
+		dataBinder.setDisallowedFields("id", "*.id");
+	}
+
+	@InitBinder("vaccination")
+	public void setVaccinationAllowedFields(WebDataBinder dataBinder) {
+		dataBinder.addValidators(new VaccinationValidator());
 		dataBinder.setDisallowedFields("id", "*.id");
 	}
 
@@ -63,19 +69,6 @@ class VaccinationController {
 	@PostMapping("owners/{ownerId}/pets/{petId}/vaccinations/new")
 	public String processNewVaccinationForm(@ModelAttribute Owner owner, @PathVariable int petId,
 			@Valid Vaccination vaccination, BindingResult result, RedirectAttributes redirectAttributes) {
-		if (vaccination.getName() == null || vaccination.getName().isEmpty()) {
-			result.rejectValue("name", "NotBlank", "Vaccine name is required.");
-		}
-
-		if (vaccination.getDate() == null || vaccination.getDate().isAfter(LocalDate.now())) {
-			result.rejectValue("date", "typeMismatch.vaccinationDate",
-					"Vaccination date must be in the past or today.");
-		}
-
-		if (vaccination.getNextDate() != null && vaccination.getNextDate().isBefore(vaccination.getDate())) {
-			result.rejectValue("nextDate", "typeMismatch.nextVaccinationDate",
-					"Next vaccination date must be after the vaccination date.");
-		}
 
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateVaccinationForm";
